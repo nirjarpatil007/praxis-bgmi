@@ -294,18 +294,36 @@ a {
   to { opacity: 1; }
 }
 
+/* ─── Tactical Corner Watermark Masking Shield ─── */
+.video-watermark-shield {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: clamp(280px, 32vw, 480px);
+  height: clamp(160px, 24vh, 280px);
+  pointer-events: none;
+  z-index: 18;
+  background: radial-gradient(
+    ellipse at 100% 100%,
+    rgba(5, 9, 15, 0.99) 0%,
+    rgba(5, 9, 15, 0.95) 45%,
+    rgba(5, 9, 15, 0.7) 70%,
+    transparent 100%
+  );
+}
+
 /* ─── Skip Intro Button (Tactical Watermark Mask) ─── */
 .skip-btn {
   position: absolute;
-  bottom: calc(var(--space-xl) - 6px);
+  bottom: calc(var(--space-xl) + 16px);
   right: calc(var(--space-xl) - 14px);
   z-index: 25;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 206px;
-  min-height: 64px;
-  padding: 0.95rem 1.65rem;
+  min-width: 216px;
+  min-height: 74px;
+  padding: 1.15rem 1.8rem;
   background: linear-gradient(135deg, rgba(14, 21, 32, 0.99) 0%, rgba(6, 10, 16, 0.99) 100%);
   border: 1px solid rgba(255, 170, 0, 0.45);
   border-left: 4px solid #ffaa00;
@@ -316,9 +334,10 @@ a {
   letter-spacing: 0.24em;
   cursor: pointer;
   opacity: 0;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.98),
-              0 0 25px rgba(0, 0, 0, 0.9),
-              0 0 18px rgba(255, 170, 0, 0.15);
+  box-shadow: 0 14px 40px 14px rgba(5, 9, 15, 0.98),
+              0 -12px 30px 10px rgba(5, 9, 15, 0.98),
+              0 0 35px rgba(0, 0, 0, 0.9),
+              0 0 20px rgba(255, 170, 0, 0.15);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
@@ -326,7 +345,18 @@ a {
               box-shadow 0.25s ease,
               background 0.25s ease;
   animation: fade-in-skip 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
-  overflow: hidden;
+  overflow: visible;
+}
+
+/* Extended Dark Tactical Perimeter Shield */
+.skip-btn::before {
+  content: '';
+  position: absolute;
+  inset: -18px -14px;
+  border-radius: 6px;
+  background: radial-gradient(ellipse at center, rgba(5, 9, 15, 0.98) 60%, rgba(5, 9, 15, 0.7) 85%, transparent 100%);
+  pointer-events: none;
+  z-index: -1;
 }
 
 .skip-btn[hidden] {
