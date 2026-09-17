@@ -81,48 +81,10 @@ function handleIntroLoading() {
 
   // For reduced motion users, skip straight to explore
   if (prefersReducedMotion) {
-    dismissEntryGate();
     skipToExplore();
     return;
   }
 
-  // Wait for entry gate interaction — this is our user gesture that unlocks audio
-  const entryGate = document.getElementById('entry-gate');
-  if (entryGate) {
-    const onEntryClick = () => {
-      entryGate.removeEventListener('click', onEntryClick);
-      entryGate.removeEventListener('keydown', onEntryKey);
-      dismissEntryGate();
-      beginVideoPlayback();
-    };
-
-    const onEntryKey = (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        onEntryClick();
-      }
-    };
-
-    entryGate.addEventListener('click', onEntryClick);
-    entryGate.addEventListener('keydown', onEntryKey);
-  } else {
-    // No gate found, try direct playback
-    beginVideoPlayback();
-  }
-}
-
-function dismissEntryGate() {
-  const entryGate = document.getElementById('entry-gate');
-  if (entryGate) {
-    entryGate.classList.add('is-dismissed');
-    // Remove from DOM after transition
-    setTimeout(() => {
-      entryGate.style.display = 'none';
-    }, 900);
-  }
-}
-
-function beginVideoPlayback() {
   const video = els.video;
   let isReady = false;
 
@@ -176,7 +138,7 @@ function onVideoReady() {
   // Hide loader
   els.loader.classList.add('hidden');
 
-  // Start with audio enabled — user already interacted via entry gate
+  // Attempt unmuted playback
   video.defaultMuted = false;
   video.muted = false;
   video.volume = 1.0;
@@ -187,17 +149,30 @@ function onVideoReady() {
   if (playPromise !== undefined) {
     playPromise
       .then(() => {
-        console.log('[PRAXIS] Hero video started with audio — entry gate gesture unlocked autoplay');
+        console.log('[PRAXIS] Hero video started with audio');
         video.classList.add('visible');
         setState(State.INTRO_PLAYING);
       })
       .catch((err) => {
-        console.warn('[PRAXIS] Unexpected playback restriction, falling back to muted:', err);
+        console.warn('[PRAXIS] Browser blocked unmuted autoplay, starting muted:', err);
         video.muted = true;
         updateSoundUI(false);
         video.play().then(() => {
           video.classList.add('visible');
           setState(State.INTRO_PLAYING);
+
+          // Auto-unmute on ANY first user interaction anywhere on the page
+          const autoUnmute = () => {
+            if (video && video.muted) {
+              video.muted = false;
+              video.volume = 1.0;
+              video.play().catch(() => {});
+              updateSoundUI(true);
+            }
+          };
+          ['click', 'touchstart', 'keydown', 'pointerdown'].forEach((evt) => {
+            window.addEventListener(evt, autoUnmute, { capture: true, once: true });
+          });
         }).catch(() => {
           video.classList.add('visible');
           setState(State.INTRO_PLAYING);
@@ -208,6 +183,7 @@ function onVideoReady() {
     setState(State.INTRO_PLAYING);
   }
 }
+
 
 function onVideoError() {
   const video = els.video;
