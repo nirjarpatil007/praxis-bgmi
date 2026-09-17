@@ -198,7 +198,8 @@ a {
   align-items: center;
   justify-content: center;
   z-index: 10;
-  background: radial-gradient(ellipse at center, rgba(6, 12, 19, 0.6) 0%, var(--color-bg) 70%);
+  background: radial-gradient(ellipse at center, rgba(6, 12, 19, 0.75) 0%, rgba(6, 12, 19, 0.95) 75%);
+  cursor: pointer;
 }
 
 .play-prompt[hidden] {
@@ -209,7 +210,7 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-lg);
+  gap: var(--space-md);
   background: none;
   border: none;
   color: var(--color-text);
@@ -220,20 +221,32 @@ a {
 }
 
 .play-btn:hover {
-  transform: scale(1.05);
-  color: var(--color-steel-bright);
+  transform: scale(1.06);
 }
 
 .play-icon {
-  width: 80px;
-  height: 80px;
-  filter: drop-shadow(0 0 20px rgba(99, 142, 170, 0.3));
+  width: 84px;
+  height: 84px;
+  color: #ffaa00;
+  filter: drop-shadow(0 0 25px rgba(255, 170, 0, 0.55));
+  animation: pulse-icon 1.5s infinite alternate;
 }
 
 .play-label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.4em;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+}
+
+.play-subtext {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  color: #ffaa00;
+  opacity: 0.9;
   text-transform: uppercase;
 }
 
@@ -308,15 +321,15 @@ a {
 /* ─── Skip Intro Button (Tactical Watermark Mask) ─── */
 .skip-btn {
   position: absolute;
-  bottom: calc(var(--space-xl) + 2px);
+  bottom: calc(var(--space-xl) - 18px);
   right: calc(var(--space-xl) - 14px);
   z-index: 25;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 232px;
-  min-height: 78px;
-  padding: 1.15rem 1.95rem;
+  min-width: 240px;
+  min-height: 104px;
+  padding: 1.55rem 2.15rem;
   background: #090e16;
   border: 1px solid rgba(255, 170, 0, 0.45);
   border-left: 4px solid #ffaa00;
@@ -1191,7 +1204,7 @@ a {
 /* ─── Skip & Sound Buttons for vid2 ─── */
 .vid2-skip-btn {
   position: absolute;
-  bottom: calc(var(--space-xl) + 2px);
+  bottom: calc(var(--space-xl) - 18px);
   right: calc(var(--space-xl) - 14px);
   z-index: 25;
 }

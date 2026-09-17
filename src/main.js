@@ -157,36 +157,8 @@ function onVideoReady() {
         setState(State.INTRO_PLAYING);
       })
       .catch((err) => {
-        console.log('[PRAXIS] Browser autoplay policy restricted unmuted playback on initial load, setting up instant auto-unmute:', err);
-        // Fallback: Start muted so video is instantly visible without delay
-        video.muted = true;
-        updateSoundUI(false);
-
-        video.play()
-          .then(() => {
-            video.classList.add('visible');
-            setState(State.INTRO_PLAYING);
-
-            // Immediately unmute on ANY first user interaction anywhere on the window
-            const unmuteOnInteraction = () => {
-              if (video && video.muted) {
-                video.muted = false;
-                video.volume = 1.0;
-                updateSoundUI(true);
-              }
-              ['pointerdown', 'mousedown', 'keydown', 'touchstart', 'click'].forEach((evt) => {
-                window.removeEventListener(evt, unmuteOnInteraction, true);
-              });
-            };
-
-            ['pointerdown', 'mousedown', 'keydown', 'touchstart', 'click'].forEach((evt) => {
-              window.addEventListener(evt, unmuteOnInteraction, { capture: true, once: true });
-            });
-          })
-          .catch(() => {
-            console.log('[PRAXIS] Autoplay restricted, showing play prompt');
-            showPlayPrompt();
-          });
+        console.log('[PRAXIS] Unmuted autoplay restricted by browser policy, showing Enter with Audio prompt:', err);
+        showPlayPrompt();
       });
   } else {
     video.classList.add('visible');
@@ -209,9 +181,15 @@ function onVideoError() {
 function showPlayPrompt() {
   els.loader.classList.add('hidden');
   els.playPrompt.hidden = false;
-
-  // Show a subtle background using the video poster or dark bg
   els.video.classList.add('visible');
+
+  // Any key or touch/click starts with sound
+  const handleFirstKey = (e) => {
+    if (!els.playPrompt.hidden) {
+      onPlayClick(e);
+    }
+  };
+  window.addEventListener('keydown', handleFirstKey, { once: true });
 }
 
 function updateSoundUI(unmuted) {
@@ -351,7 +329,10 @@ function onSkipClick(e) {
 function onPlayClick(e) {
   if (e) e.stopPropagation();
   els.playPrompt.hidden = true;
+  els.video.currentTime = 0;
+  els.video.defaultMuted = false;
   els.video.muted = false;
+  els.video.volume = 1.0;
   updateSoundUI(true);
 
   const playPromise = els.video.play();
@@ -701,6 +682,9 @@ function init() {
   // Bind event listeners
   els.skipBtn.addEventListener('click', onSkipClick);
   els.playBtn.addEventListener('click', onPlayClick);
+  if (els.playPrompt) {
+    els.playPrompt.addEventListener('click', onPlayClick);
+  }
   els.exploreCta.addEventListener('click', onExploreCTAClick);
   if (els.soundBtn) {
     els.soundBtn.addEventListener('click', toggleSound);
