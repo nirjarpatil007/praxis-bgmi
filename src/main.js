@@ -140,21 +140,25 @@ function onVideoReady() {
   // Hide loader
   els.loader.classList.add('hidden');
 
-  // Try unmuted autoplay first
+  // Start with audio enabled by default
+  video.defaultMuted = false;
   video.muted = false;
+  video.volume = 1.0;
+  updateSoundUI(true);
+
   const playPromise = video.play();
 
   if (playPromise !== undefined) {
     playPromise
       .then(() => {
-        // Unmuted autoplay succeeded!
+        // Direct unmuted autoplay succeeded!
         updateSoundUI(true);
         video.classList.add('visible');
         setState(State.INTRO_PLAYING);
       })
       .catch((err) => {
-        // Browser policy prevented unmuted autoplay, fallback to muted with clear un-mute control
-        console.log('[PRAXIS] Unmuted playback blocked by browser policy, trying muted autoplay');
+        console.log('[PRAXIS] Browser autoplay policy restricted unmuted playback on initial load, setting up instant auto-unmute:', err);
+        // Fallback: Start muted so video is instantly visible without delay
         video.muted = true;
         updateSoundUI(false);
 
@@ -162,9 +166,25 @@ function onVideoReady() {
           .then(() => {
             video.classList.add('visible');
             setState(State.INTRO_PLAYING);
+
+            // Immediately unmute on ANY first user interaction anywhere on the window
+            const unmuteOnInteraction = () => {
+              if (video && video.muted) {
+                video.muted = false;
+                video.volume = 1.0;
+                updateSoundUI(true);
+              }
+              ['pointerdown', 'mousedown', 'keydown', 'touchstart', 'click'].forEach((evt) => {
+                window.removeEventListener(evt, unmuteOnInteraction, true);
+              });
+            };
+
+            ['pointerdown', 'mousedown', 'keydown', 'touchstart', 'click'].forEach((evt) => {
+              window.addEventListener(evt, unmuteOnInteraction, { capture: true, once: true });
+            });
           })
           .catch(() => {
-            console.log('[PRAXIS] Muted autoplay also blocked, showing play prompt');
+            console.log('[PRAXIS] Autoplay restricted, showing play prompt');
             showPlayPrompt();
           });
       });

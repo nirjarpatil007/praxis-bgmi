@@ -41,8 +41,8 @@
         <p class="loader-text">INITIALIZING</p>
       </div>
 
-      <!-- Video element -->
-      <video id="hero-video" class="hero-video" autoplay muted playsinline preload="auto" disablepictureinpicture
+      <!-- Video element (Default Unmuted Audio) -->
+      <video id="hero-video" class="hero-video" autoplay playsinline preload="auto" disablepictureinpicture
         disableremoteplayback aria-hidden="true">
         <source src="/videos/hero-video.mp4" type="video/mp4" />
       </video>
@@ -58,8 +58,8 @@
         </button>
       </div>
 
-      <!-- Audio toggle control -->
-      <button id="sound-btn" class="sound-btn is-muted" hidden aria-label="Unmute audio">
+      <!-- Audio toggle control (Default Audio ON) -->
+      <button id="sound-btn" class="sound-btn" hidden aria-label="Mute audio">
         <span class="sound-icon-wrapper" aria-hidden="true">
           <svg class="sound-icon sound-icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="1.5">
@@ -74,7 +74,7 @@
             <line x1="17" y1="9" x2="23" y2="15" />
           </svg>
         </span>
-        <span id="sound-label" class="sound-label">CLICK FOR AUDIO</span>
+        <span id="sound-label" class="sound-label">SOUND: ON</span>
       </button>
 
       <!-- Skip intro control (Tactical Watermark Mask) -->
