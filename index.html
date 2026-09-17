@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PRAXIS — Enter the Experience</title>
+    <meta name="description" content="PRAXIS — A premium cinematic event experience. Explore curated events in an elite, immersive environment." />
+    <meta name="theme-color" content="#060c13" />
+
+    <!-- Preconnect for Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+
+    <!-- Preload videos -->
+    <link rel="preload" as="video" href="/videos/hero-video.mp4" type="video/mp4" />
+    <link rel="preload" as="video" href="/videos/vid2.mp4" type="video/mp4" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+
+    <!-- ═══════════════════════════════════════════════════
+         LANDING PAGE — Cinematic Video-First Experience
+         Flow: VIDEO → SPLASH → EXPLORE → EVENTS
+         ═══════════════════════════════════════════════════ -->
+
+    <div id="app">
+
+      <!-- ─── VIDEO INTRO ─── -->
+      <section id="video-intro" class="video-intro" aria-label="Cinematic introduction">
+        <!-- Loading state -->
+        <div id="intro-loader" class="intro-loader" role="status" aria-live="polite">
+          <div class="loader-ring"></div>
+          <p class="loader-text">INITIALIZING</p>
+        </div>
+
+        <!-- Video element -->
+        <video
+          id="hero-video"
+          class="hero-video"
+          autoplay
+          muted
+          playsinline
+          preload="auto"
+          disablepictureinpicture
+          disableremoteplayback
+          aria-hidden="true"
+        >
+          <source src="/videos/hero-video.mp4" type="video/mp4" />
+        </video>
+
+        <!-- Autoplay fallback prompt -->
+        <div id="play-prompt" class="play-prompt" hidden>
+          <button id="play-btn" class="play-btn" aria-label="Play cinematic introduction">
+            <svg class="play-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="32" cy="32" r="30" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+              <polygon points="26,20 26,44 46,32" fill="currentColor"/>
+            </svg>
+            <span class="play-label">ENTER EXPERIENCE</span>
+          </button>
+        </div>
+
+        <!-- Audio toggle control -->
+        <button id="sound-btn" class="sound-btn is-muted" hidden aria-label="Unmute audio">
+          <span class="sound-icon-wrapper" aria-hidden="true">
+            <svg class="sound-icon sound-icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" opacity="0.3"/>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            </svg>
+            <svg class="sound-icon sound-icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" opacity="0.3"/>
+              <line x1="23" y1="9" x2="17" y2="15"/>
+              <line x1="17" y1="9" x2="23" y2="15"/>
+            </svg>
+          </span>
+          <span id="sound-label" class="sound-label">CLICK FOR AUDIO</span>
+        </button>
+
+        <!-- Skip intro control (Tactical Watermark Mask) -->
+        <button id="skip-btn" class="skip-btn tactical-skip-btn" hidden aria-label="Skip cinematic introduction">
+          <span class="skip-btn-corner tl" aria-hidden="true"></span>
+          <span class="skip-btn-corner br" aria-hidden="true"></span>
+          <span class="skip-inner">
+            <span class="skip-dot" aria-hidden="true"></span>
+            <span class="skip-text">SKIP INTRO</span>
+            <svg class="skip-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M9 5l7 7-7 7"/>
+            </svg>
+          </span>
+        </button>
+      </section>
+
+      <!-- ─── INTRO SPLASH / BRANDED REVEAL ─── -->
+      <section id="intro-splash" class="intro-splash" aria-label="Brand reveal" hidden>
+        <div class="splash-container">
+          <!-- Ring/halo motif -->
+          <div class="splash-ring" aria-hidden="true">
+            <div class="ring-outer"></div>
+            <div class="ring-inner"></div>
+            <div class="ring-glow"></div>
+          </div>
+
+          <!-- Brand reveal -->
+          <div class="splash-brand">
+            <p class="splash-subtitle">SECURE LINK ACTIVE</p>
+            <h1 class="splash-title">PRAXIS</h1>
+            <div class="splash-line" aria-hidden="true"></div>
+            <p class="splash-tagline">EVENTS INTELLIGENCE DIVISION</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── EXPLORE EVENTS CTA ─── -->
+      <section id="explore-events" class="explore-events" aria-label="Explore event call to action" hidden>
+        <!-- Armory backdrop replacing second screenshot -->
+        <div class="explore-bg-media" aria-hidden="true">
+          <img src="/images/armory.jpg" alt="Special Operations Armory" class="explore-bg-img" />
+          <div class="explore-bg-overlay"></div>
+          <div class="explore-bg-vignette"></div>
+        </div>
+
+        <div class="explore-container">
+          <div class="explore-content">
+            <!-- Tactical BGMI Badge -->
+            <div class="bgmi-badge">
+              <span class="badge-icon">▲</span>
+              <span class="badge-brand">BATTLEGROUNDS MOBILE INDIA</span>
+              <span class="badge-tag">AIRDROP READY</span>
+            </div>
+
+            <!-- Metallic Battle-Royale Headline -->
+            <h2 class="explore-heading bgmi-title">
+              <span class="title-accent">LEVEL 3 PROTOCOL</span>
+              <span class="title-main">BATTLEGROUND<br/>OF LEGENDS</span>
+            </h2>
+
+            <!-- BGMI Tactical Telemetry Line -->
+            <div class="bgmi-telemetry">
+              <span class="telemetry-item"><span class="pulse-dot"></span> SQUAD AIRDROP</span>
+              <span class="telemetry-sep">|</span>
+              <span class="telemetry-item">SECURE ARSENAL</span>
+              <span class="telemetry-sep">|</span>
+              <span class="telemetry-item">FINAL PLAYZONE</span>
+            </div>
+
+            <p class="explore-quote">DIFFERENT BATTLES — SAME HEROES</p>
+
+            <div class="explore-divider" aria-hidden="true"></div>
+
+            <!-- Authentic BGMI Gold Tactical Primary Button -->
+            <a href="#events-section" id="explore-cta" class="explore-cta bgmi-cta-btn" role="button">
+              <span class="btn-slant-bg" aria-hidden="true"></span>
+              <span class="btn-inner">
+                <svg class="btn-play-icon" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true">
+                  <polygon points="6 4 20 12 6 20 6 4"/>
+                </svg>
+                <span class="btn-label">EXPLORE EVENT</span>
+                <span class="btn-flare" aria-hidden="true"></span>
+              </span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── VID2 CINEMATIC TRANSITION & PLAYBACK ─── -->
+      <section id="vid2-container" class="vid2-container" aria-label="Tactical briefing video vid2" hidden>
+        <!-- Video element vid2: Hardware accelerated 4K presentation -->
+        <video
+          id="vid2"
+          class="vid2-video"
+          playsinline
+          preload="auto"
+          disablepictureinpicture
+          disableremoteplayback
+          aria-label="Mission Briefing Vid2"
+        >
+          <source src="/videos/vid2.mp4" type="video/mp4" />
+        </video>
+
+        <!-- Decoupled optical flash overlay (keeps video decoding 100% on GPU) -->
+        <div id="vid2-flash-overlay" class="vid2-flash-overlay" aria-hidden="true"></div>
+
+        <!-- Smooth Outro Fade Veil (Dissolves video & audio smoothly before end) -->
+        <div id="vid2-outro-fade" class="vid2-outro-fade" aria-hidden="true"></div>
+
+        <!-- Tactical HUD Overlay for vid2 -->
+        <div class="vid2-hud" aria-hidden="true">
+          <div class="vid2-hud-top">
+            <div class="vid2-badge">
+              <span class="pulse-dot"></span>
+              <span class="vid2-badge-text">LIVE TRANSMISSION // CLASSIFIED INTEL</span>
+            </div>
+            <div class="vid2-tag">VID-02 PROTOCOL</div>
+          </div>
+
+          <div class="vid2-hud-bottom">
+            <div class="vid2-progress-track">
+              <div id="vid2-progress-bar" class="vid2-progress-bar"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vid2 Sound toggle -->
+        <button id="vid2-sound-btn" class="sound-btn is-unmuted vid2-sound-btn" aria-label="Toggle sound">
+          <span class="sound-icon-wrapper" aria-hidden="true">
+            <svg class="sound-icon sound-icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" opacity="0.3"/>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            </svg>
+            <svg class="sound-icon sound-icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" opacity="0.3"/>
+              <line x1="23" y1="9" x2="17" y2="15"/>
+              <line x1="17" y1="9" x2="23" y2="15"/>
+            </svg>
+          </span>
+          <span id="vid2-sound-label" class="sound-label">AUDIO ON</span>
+        </button>
+
+        <!-- Vid2 Skip Button (Tactical Watermark Mask) -->
+        <button id="vid2-skip-btn" class="skip-btn vid2-skip-btn tactical-skip-btn" aria-label="Skip briefing video">
+          <span class="skip-btn-corner tl" aria-hidden="true"></span>
+          <span class="skip-btn-corner br" aria-hidden="true"></span>
+          <span class="skip-inner">
+            <span class="skip-dot" aria-hidden="true"></span>
+            <span class="skip-text">SKIP TO EVENTS</span>
+            <svg class="skip-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M9 5l7 7-7 7"/>
+            </svg>
+          </span>
+        </button>
+      </section>
+
+      <!-- ─── BGMI SHOWDOWN OFFICIAL OVERVIEW & REGISTRATION ─── -->
+      <section id="events-section" class="events-section showdown-section" aria-label="BGMI Showdown Official Event Overview">
+        <!-- Sticky / Floating Registration Action Bar with Smooth Section Tabs -->
+        <div class="showdown-sticky-bar">
+          <div class="sticky-bar-left">
+            <span class="live-pulse"></span>
+            <span class="sticky-title">PRAXIS '26 // SHOWDOWN</span>
+            <span class="sticky-tag">SLOTS LIVE</span>
+          </div>
+
+          <!-- Smooth In-Page Tab Navigation -->
+          <nav class="sticky-nav-tabs" aria-label="Section Navigation">
+            <a href="#overview-hero" class="sticky-nav-tab active" data-target="overview-hero">OVERVIEW</a>
+            <a href="#prizes-section" class="sticky-nav-tab" data-target="prizes-section">PRIZES</a>
+            <a href="#rules-breakdown" class="sticky-nav-tab" data-target="rules-breakdown">STAGES</a>
+            <a href="#points-system" class="sticky-nav-tab" data-target="points-system">POINTS</a>
+            <a href="#general-rules" class="sticky-nav-tab" data-target="general-rules">RULES</a>
+            <a href="#contact-support" class="sticky-nav-tab" data-target="contact-support">HELP</a>
+          </nav>
+
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLSeQhDQ5vHf19jNoTkXC8qm14bEgfonRoMi00E5iHIvHvvREYg/viewform"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="sticky-register-btn"
+          >
+            <span class="btn-flare" aria-hidden="true"></span>
+            REGISTER SQUAD NOW
+          </a>
+        </div>
+
+        <div class="showdown-container">
+          <!-- Hero Header -->
+          <header id="overview-hero" class="showdown-hero">
+            <div class="showdown-badge">
+              <span class="badge-icon">▲</span>
+              <span class="badge-text">OFFICIAL TOURNAMENT RULEBOOK & OVERVIEW</span>
+              <span class="badge-tag">PRAXIS '26</span>
+            </div>
+            <h1 class="showdown-main-title">
+              <span class="title-sub">BATTLEGROUNDS MOBILE INDIA</span>
+              <span class="title-core">BGMI SHOWDOWN</span>
+            </h1>
+            <p class="showdown-tagline">THE ULTIMATE SQUAD BATTLE | SKILL • STRATEGY • SURVIVAL</p>
+
+            <!-- Primary Register CTA Button -->
+            <div class="showdown-hero-actions">
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSeQhDQ5vHf19jNoTkXC8qm14bEgfonRoMi00E5iHIvHvvREYg/viewform"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hero-register-btn bgmi-cta-btn"
+                role="button"
+              >
+                <span class="btn-slant-bg" aria-hidden="true"></span>
+                <span class="btn-inner">
+                  <svg class="btn-play-icon" viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true">
+                    <polygon points="6 4 20 12 6 20 6 4"/>
+                  </svg>
+                  <span class="btn-label">REGISTER NOW — GOOGLE FORM</span>
+                  <span class="btn-flare" aria-hidden="true"></span>
+                </span>
+              </a>
+              <a href="#rules-breakdown" class="hero-rules-link">
+                <span>VIEW TOURNAMENT SPECS</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+              </a>
+            </div>
+          </header>
+
+          <!-- Quick Event Specs (4 key pillars) -->
+          <div id="specs-breakdown" class="specs-grid">
+            <div class="spec-card">
+              <div class="spec-icon">👥</div>
+              <div class="spec-label">EVENT TYPE</div>
+              <div class="spec-val">TEAM EVENT</div>
+              <div class="spec-sub">Squad Battle (4 Members)</div>
+            </div>
+            <div class="spec-card">
+              <div class="spec-icon">⚔️</div>
+              <div class="spec-label">TOTAL ROUNDS</div>
+              <div class="spec-val">2 ROUNDS</div>
+              <div class="spec-sub">Eliminator → Grand Finale</div>
+            </div>
+            <div class="spec-card highlight">
+              <div class="spec-icon">🏆</div>
+              <div class="spec-label">TOTAL PRIZE POOL</div>
+              <div class="spec-val text-gold">₹15,000</div>
+              <div class="spec-sub">Cash on top for Top 3</div>
+            </div>
+            <div class="spec-card">
+              <div class="spec-icon">📱</div>
+              <div class="spec-label">DEVICE POLICY</div>
+              <div class="spec-val">MOBILE ONLY</div>
+              <div class="spec-sub">No Emulators, iPads, or Tablets</div>
+            </div>
+          </div>
+
+          <!-- Prize Pool Showcase -->
+          <section id="prizes-section" class="prize-section">
+            <div class="section-title-wrap">
+              <span class="section-kicker">// OFFICIAL REWARDS</span>
+              <h2 class="section-heading">PRIZE DISTRIBUTION</h2>
+              <div class="heading-line" aria-hidden="true"></div>
+            </div>
+
+            <div class="prize-grid">
+              <!-- 2nd Place -->
+              <div class="prize-card silver">
+                <div class="prize-crown">🥈</div>
+                <div class="prize-rank">RUNNER-UP</div>
+                <div class="prize-amount">₹5,000</div>
+                <div class="prize-desc">"Clutch plays, solid reward."</div>
+                <div class="prize-badge">2ND PLACE</div>
+              </div>
+
+              <!-- 1st Place (Winner, elevated in middle) -->
+              <div class="prize-card gold winner-card">
+                <div class="winner-glow" aria-hidden="true"></div>
+                <div class="prize-crown">🥇</div>
+                <div class="prize-rank">CHAMPION</div>
+                <div class="prize-amount">₹7,000</div>
+                <div class="prize-desc">"Chicken Dinner with cash on top."</div>
+                <div class="prize-badge">1ST PLACE WINNER</div>
+              </div>
+
+              <!-- 3rd Place -->
+              <div class="prize-card bronze">
+                <div class="prize-crown">🥉</div>
+                <div class="prize-rank">SECOND RUNNER-UP</div>
+                <div class="prize-amount">₹3,000</div>
+                <div class="prize-desc">"Proof you belong among the best."</div>
+                <div class="prize-badge">3RD PLACE</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Tournament Stages (Rounds 1 & 2) -->
+          <section id="rules-breakdown" class="rounds-section">
+            <div class="section-title-wrap">
+              <span class="section-kicker">// TOURNAMENT ROADMAP</span>
+              <h2 class="section-heading">ROUNDS BREAKDOWN</h2>
+              <div class="heading-line" aria-hidden="true"></div>
+            </div>
+
+            <!-- Interactive Stage Filter Tabs -->
+            <div class="stage-tabs-wrapper" role="tablist" aria-label="Tournament Stages Selection">
+              <button type="button" class="stage-tab-btn active" data-stage="all" role="tab" aria-selected="true">
+                <span class="stage-tab-dot"></span>
+                <span class="stage-tab-text">ALL STAGES</span>
+              </button>
+              <button type="button" class="stage-tab-btn" data-stage="stage-1" role="tab" aria-selected="false">
+                <span class="stage-tab-num">01</span>
+                <span class="stage-tab-text">STAGE 1: ELIMINATOR</span>
+              </button>
+              <button type="button" class="stage-tab-btn" data-stage="stage-2" role="tab" aria-selected="false">
+                <span class="stage-tab-num">02</span>
+                <span class="stage-tab-text">STAGE 2: GRAND FINALE</span>
+              </button>
+            </div>
+
+            <div class="rounds-grid">
+              <!-- Round 1 -->
+              <div class="round-card" data-stage-card="stage-1">
+                <div class="round-header">
+                  <span class="round-badge">STAGE 01</span>
+                  <h3 class="round-name">ROUND 1: ELIMINATOR ROUND</h3>
+                  <p class="round-quote">"Survive or get eliminated. No second chances."</p>
+                </div>
+                <div class="round-body">
+                  <div class="round-stat-row">
+                    <span class="stat-name">Total Matches:</span>
+                    <span class="stat-val highlight-orange">2 Matches</span>
+                  </div>
+                  <div class="map-pool">
+                    <div class="map-pill"><span class="map-num">M1</span> Erangel</div>
+                    <div class="map-pill"><span class="map-num">M2</span> Miramar</div>
+                  </div>
+                  <div class="round-rules-list">
+                    <div class="rule-bullet">Points from both matches will be combined.</div>
+                    <div class="rule-bullet">All registered teams must play both matches.</div>
+                    <div class="rule-bullet">No skipping matches is allowed.</div>
+                  </div>
+                  <div class="round-qualification-box">
+                    <div class="qual-icon">▲</div>
+                    <div>
+                      <strong>QUALIFICATION:</strong> The Top 8 teams from the combined leaderboard will qualify for the Grand Finale. Scores from this round are only for qualification and will not be carried forward.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Round 2 -->
+              <div class="round-card highlight-card" data-stage-card="stage-2">
+                <div class="round-header">
+                  <span class="round-badge gold-badge">STAGE 02 — THE CLIMAX</span>
+                  <h3 class="round-name">ROUND 2: GRAND FINALE</h3>
+                  <p class="round-quote">"Pressure peaks. Legends are decided here."</p>
+                </div>
+                <div class="round-body">
+                  <div class="round-stat-row">
+                    <span class="stat-name">Qualified Teams:</span>
+                    <span class="stat-val">Top 8 Teams from Eliminator Round</span>
+                  </div>
+                  <div class="round-stat-row">
+                    <span class="stat-name">Total Matches:</span>
+                    <span class="stat-val highlight-orange">4 Matches</span>
+                  </div>
+                  <div class="map-pool">
+                    <div class="map-pill"><span class="map-num">M1</span> Erangel</div>
+                    <div class="map-pill"><span class="map-num">M2</span> Miramar</div>
+                    <div class="map-pill"><span class="map-num">M3</span> Sanhok</div>
+                    <div class="map-pill"><span class="map-num">M4</span> Erangel</div>
+                  </div>
+                  <div class="round-rules-list">
+                    <div class="rule-bullet">Points from all 4 matches will be combined.</div>
+                    <div class="rule-bullet">Final winners will be decided only on Grand Finale points.</div>
+                    <div class="rule-bullet">Round 1 scores do not affect final standings.</div>
+                  </div>
+                  <div class="round-qualification-box championship-box">
+                    <div class="qual-icon">👑</div>
+                    <div>
+                      <strong>CHAMPIONSHIP DECISION:</strong> Highest aggregate points across all 4 matches claims the ₹7,000 top cash prize.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Points System -->
+          <section id="points-system" class="points-section">
+            <div class="section-title-wrap">
+              <span class="section-kicker">// HOW YOU SCORE</span>
+              <h2 class="section-heading">POINTS SYSTEM</h2>
+              <p class="section-subtext">Every match rewards both survival and aggression. Smart rotations + clean finishes = max points.</p>
+              <div class="heading-line" aria-hidden="true"></div>
+            </div>
+
+            <div class="points-container">
+              <!-- Placement Points Table -->
+              <div class="points-block">
+                <h4 class="points-subheading">📍 PLACEMENT POINTS</h4>
+                <div class="points-table">
+                  <div class="pt-row pt-top"><span class="pt-rank">1st Place (Winner)</span><span class="pt-val">15 Points</span></div>
+                  <div class="pt-row"><span class="pt-rank">2nd Place</span><span class="pt-val">12 Points</span></div>
+                  <div class="pt-row"><span class="pt-rank">3rd Place</span><span class="pt-val">10 Points</span></div>
+                  <div class="pt-row"><span class="pt-rank">4th Place</span><span class="pt-val">8 Points</span></div>
+                  <div class="pt-row"><span class="pt-rank">5th Place</span><span class="pt-val">6 Points</span></div>
+                  <div class="pt-row"><span class="pt-rank">6th Place</span><span class="pt-val">4 Points</span></div>
+                  <div class="pt-row"><span class="pt-rank">7th Place</span><span class="pt-val">2 Points</span></div>
+                  <div class="pt-row"><span class="pt-rank">8th to 12th Place</span><span class="pt-val">1 Point</span></div>
+                  <div class="pt-row pt-zero"><span class="pt-rank">13th to 16th Place</span><span class="pt-val">0 Points</span></div>
+                </div>
+              </div>
+
+              <!-- Finish Points & Formula Card -->
+              <div class="points-block formula-block">
+                <h4 class="points-subheading">🎯 FINISH (KILL) POINTS</h4>
+                <div class="finish-callout">
+                  <div class="finish-pts">1 POINT</div>
+                  <div class="finish-label">Each Confirmed Finish = 1 Point</div>
+                  <p class="finish-desc">Every individual kill secured by any member of your squad adds 1 full point to your team's leaderboard score.</p>
+                </div>
+
+                <div class="formula-box">
+                  <div class="formula-title">// TOTAL SCORE CALCULATION</div>
+                  <div class="formula-math">
+                    <span class="formula-item">Total Points</span>
+                    <span class="formula-op">=</span>
+                    <span class="formula-item highlight">Placement Points</span>
+                    <span class="formula-op">+</span>
+                    <span class="formula-item highlight">Finish Points</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- General Rules Grid -->
+          <section id="general-rules" class="general-rules-section">
+            <div class="section-title-wrap">
+              <span class="section-kicker">// COMPLIANCE & INTEGRITY</span>
+              <h2 class="section-heading">GENERAL RULES</h2>
+              <div class="heading-line" aria-hidden="true"></div>
+            </div>
+
+            <div class="rules-grid">
+              <div class="rule-card danger-card">
+                <div class="rule-icon">🚫</div>
+                <h4>MOBILE PHONES ONLY</h4>
+                <p>Emulators, iPads, and tablets are <strong>not allowed</strong>. Only mobile phones are permitted. Any device violation leads to <strong>immediate disqualification</strong>.</p>
+              </div>
+
+              <div class="rule-card">
+                <div class="rule-icon">🛡️</div>
+                <h4>FAIR PLAY PROTOCOL</h4>
+                <p>Cheating, abusive language, misconduct, teaming, or information sharing is strictly prohibited and will result in <strong>disqualification</strong>.</p>
+              </div>
+
+              <div class="rule-card">
+                <div class="rule-icon">🔑</div>
+                <h4>CUSTOM ROOM ACCESS</h4>
+                <p>Matches will be played in organizer-hosted custom rooms. Teams must join using the official <strong>Room ID and Password</strong> within the given time. Late entry may result in match forfeiture.</p>
+              </div>
+
+              <div class="rule-card">
+                <div class="rule-icon">⚖️</div>
+                <h4>COORDINATOR DECISIONS FINAL</h4>
+                <p>Teams must follow all coordinator and referee instructions. Event coordinators’ decisions are final. <em>Play fair. Play clean. Respect the game.</em></p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Event Leads & Contact -->
+          <section id="contact-support" class="contact-section">
+            <div class="contact-card">
+              <div class="contact-left">
+                <span class="contact-kicker">// EVENT LEADS & CONTACT</span>
+                <h3 class="contact-name">Ayush Chandwadkar</h3>
+                <p class="contact-role">Official Event Coordinator — BGMI Showdown PRAXIS '26</p>
+              </div>
+              <div class="contact-actions">
+                <a href="tel:8421517331" class="contact-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  <span>CALL: 8421517331</span>
+                </a>
+                <a href="https://wa.me/918421517331" target="_blank" rel="noopener noreferrer" class="contact-btn whatsapp-btn">
+                  <span>WHATSAPP SUPPORT</span>
+                </a>
+              </div>
+            </div>
+          </section>
+
+          <!-- Final Register CTA Banner -->
+          <section id="register-now" class="final-cta-section">
+            <div class="final-cta-box">
+              <span class="final-kicker">AIRDROP SECURED // REGISTRATIONS LIVE</span>
+              <h2 class="final-title">ENLIST YOUR SQUAD FOR THE SHOWDOWN</h2>
+              <p class="final-desc">Fill out the official Google Form with your 4-player squad roster, in-game BGMI IDs, and contact info before slots fill up.</p>
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSeQhDQ5vHf19jNoTkXC8qm14bEgfonRoMi00E5iHIvHvvREYg/viewform"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="final-register-btn bgmi-cta-btn"
+                role="button"
+              >
+                <span class="btn-slant-bg" aria-hidden="true"></span>
+                <span class="btn-inner">
+                  <svg class="btn-play-icon" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true">
+                    <polygon points="6 4 20 12 6 20 6 4"/>
+                  </svg>
+                  <span class="btn-label">REGISTER NOW — GOOGLE FORM</span>
+                  <span class="btn-flare" aria-hidden="true"></span>
+                </span>
+              </a>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="site-footer">
+          <div class="footer-line" aria-hidden="true"></div>
+          <p class="footer-text">&copy; 2026 PRAXIS — BGMI SHOWDOWN OFFICIAL TOURNAMENT</p>
+          <p class="footer-sub">SECURE CHANNEL — PLAY FAIR • PLAY CLEAN • RESPECT THE GAME</p>
+        </footer>
+      </section>
+
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
