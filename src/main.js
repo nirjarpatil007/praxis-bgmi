@@ -81,24 +81,50 @@ function handleIntroLoading() {
 
   // For reduced motion users, skip straight to explore
   if (prefersReducedMotion) {
+    dismissEntryGate();
     skipToExplore();
     return;
   }
 
+  // Wait for entry gate interaction — this is our user gesture that unlocks audio
+  const entryGate = document.getElementById('entry-gate');
+  if (entryGate) {
+    const onEntryClick = () => {
+      entryGate.removeEventListener('click', onEntryClick);
+      entryGate.removeEventListener('keydown', onEntryKey);
+      dismissEntryGate();
+      beginVideoPlayback();
+    };
+
+    const onEntryKey = (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        onEntryClick();
+      }
+    };
+
+    entryGate.addEventListener('click', onEntryClick);
+    entryGate.addEventListener('keydown', onEntryKey);
+  } else {
+    // No gate found, try direct playback
+    beginVideoPlayback();
+  }
+}
+
+function dismissEntryGate() {
+  const entryGate = document.getElementById('entry-gate');
+  if (entryGate) {
+    entryGate.classList.add('is-dismissed');
+    // Remove from DOM after transition
+    setTimeout(() => {
+      entryGate.style.display = 'none';
+    }, 900);
+  }
+}
+
+function beginVideoPlayback() {
   const video = els.video;
   let isReady = false;
-
-  // Track early user interaction to immediately unlock unmuted audio
-  const onEarlyGesture = () => {
-    if (video) {
-      video.defaultMuted = false;
-      video.muted = false;
-      video.volume = 1.0;
-    }
-  };
-  ['pointerdown', 'mousedown', 'mouseup', 'keydown', 'touchstart', 'click', 'focus'].forEach((evt) => {
-    window.addEventListener(evt, onEarlyGesture, { capture: true, once: true });
-  });
 
   const triggerReady = () => {
     if (isReady) return;
@@ -150,7 +176,7 @@ function onVideoReady() {
   // Hide loader
   els.loader.classList.add('hidden');
 
-  // Start with audio enabled by default — exactly like vid2
+  // Start with audio enabled — user already interacted via entry gate
   video.defaultMuted = false;
   video.muted = false;
   video.volume = 1.0;
@@ -161,34 +187,17 @@ function onVideoReady() {
   if (playPromise !== undefined) {
     playPromise
       .then(() => {
-        console.log('[PRAXIS] Hero video started playing successfully with audio');
+        console.log('[PRAXIS] Hero video started with audio — entry gate gesture unlocked autoplay');
         video.classList.add('visible');
         setState(State.INTRO_PLAYING);
       })
       .catch((err) => {
-        console.warn('[PRAXIS] Browser restriction on initial load, starting and unlocking audio on gesture:', err);
+        console.warn('[PRAXIS] Unexpected playback restriction, falling back to muted:', err);
         video.muted = true;
-        updateSoundUI(true); // Keep UI in AUDIO ON mode
+        updateSoundUI(false);
         video.play().then(() => {
           video.classList.add('visible');
           setState(State.INTRO_PLAYING);
-
-          // Auto-unmute immediately on ANY first user interaction anywhere
-          const autoUnmuteOnFirstTouch = () => {
-            if (video && video.muted) {
-              video.muted = false;
-              video.volume = 1.0;
-              video.play().catch(() => {});
-              updateSoundUI(true);
-            }
-            ['pointerdown', 'mousedown', 'mouseup', 'keydown', 'touchstart', 'touchend', 'click'].forEach((evt) => {
-              window.removeEventListener(evt, autoUnmuteOnFirstTouch, true);
-            });
-          };
-
-          ['pointerdown', 'mousedown', 'mouseup', 'keydown', 'touchstart', 'touchend', 'click'].forEach((evt) => {
-            window.addEventListener(evt, autoUnmuteOnFirstTouch, { capture: true, once: true });
-          });
         }).catch(() => {
           video.classList.add('visible');
           setState(State.INTRO_PLAYING);

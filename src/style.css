@@ -95,6 +95,213 @@ a {
 
 
 /* ═══════════════════════════════════════════════════════════
+   0. ENTRY GATE — Cinematic Audio Unlock
+   ═══════════════════════════════════════════════════════════ */
+
+.entry-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.8s var(--ease-cinematic), visibility 0.8s;
+}
+
+.entry-gate.is-dismissed {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.entry-gate-bg {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(99, 142, 170, 0.08) 0%, transparent 70%),
+    var(--color-black-deep);
+}
+
+.entry-gate-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  text-align: center;
+  animation: entryFadeIn 1.2s var(--ease-cinematic) both;
+}
+
+@keyframes entryFadeIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Ring motif */
+.entry-ring {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-bottom: var(--space-lg);
+}
+
+.entry-ring-outer {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(99, 142, 170, 0.3);
+  border-radius: 50%;
+  animation: entryRingSpin 12s linear infinite;
+}
+
+.entry-ring-inner {
+  position: absolute;
+  inset: 18px;
+  border: 1px solid rgba(99, 142, 170, 0.15);
+  border-radius: 50%;
+  animation: entryRingSpin 8s linear infinite reverse;
+}
+
+.entry-ring-pulse {
+  position: absolute;
+  inset: 30px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99, 142, 170, 0.12) 0%, transparent 70%);
+  animation: entryRingPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes entryRingSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes entryRingPulse {
+  0%, 100% { transform: scale(0.85); opacity: 0.4; }
+  50%      { transform: scale(1.15); opacity: 1; }
+}
+
+/* Text */
+.entry-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.35em;
+  color: var(--color-steel);
+  text-transform: uppercase;
+  margin-bottom: var(--space-sm);
+  opacity: 0.7;
+}
+
+.entry-title {
+  font-family: 'Bebas Neue', var(--font-display);
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  letter-spacing: 0.15em;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: var(--space-xs);
+  text-shadow: 0 0 40px rgba(99, 142, 170, 0.25);
+}
+
+.entry-line {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-steel), transparent);
+  margin: var(--space-sm) auto var(--space-md);
+}
+
+.entry-subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  color: var(--color-gray);
+  text-transform: uppercase;
+  margin-bottom: var(--space-xl);
+}
+
+/* Play button */
+.entry-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.3s var(--ease-cinematic);
+}
+
+.entry-btn:hover {
+  transform: scale(1.08);
+}
+
+.entry-btn-ring {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  top: -8px;
+  border: 1.5px solid rgba(99, 142, 170, 0.35);
+  border-radius: 50%;
+  animation: entryBtnRingPulse 2s ease-in-out infinite;
+}
+
+@keyframes entryBtnRingPulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50%      { transform: scale(1.2); opacity: 0; }
+}
+
+.entry-btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(99, 142, 170, 0.12);
+  border: 1.5px solid rgba(99, 142, 170, 0.4);
+  color: var(--color-steel-bright);
+  backdrop-filter: blur(4px);
+  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.entry-btn-icon svg {
+  margin-left: 3px; /* visual center for play triangle */
+}
+
+.entry-btn:hover .entry-btn-icon {
+  background: rgba(99, 142, 170, 0.22);
+  border-color: var(--color-steel-bright);
+  box-shadow: 0 0 30px rgba(99, 142, 170, 0.2);
+}
+
+.entry-btn-text {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.4em;
+  color: var(--color-steel-bright);
+  text-transform: uppercase;
+}
+
+.entry-hint {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.35em;
+  color: var(--color-gray-dim);
+  text-transform: uppercase;
+  margin-top: var(--space-lg);
+  animation: entryHintPulse 3s ease-in-out infinite;
+}
+
+@keyframes entryHintPulse {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 0.8; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
    1. VIDEO INTRO
    ═══════════════════════════════════════════════════════════ */
 
