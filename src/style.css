@@ -165,7 +165,9 @@ a {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .loader-text {
@@ -177,8 +179,15 @@ a {
 }
 
 @keyframes pulse-text {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 /* ─── Autoplay fallback prompt ─── */
@@ -207,7 +216,7 @@ a {
   cursor: pointer;
   padding: var(--space-xl);
   transition: transform var(--duration-med) var(--ease-cinematic),
-              color var(--duration-fast);
+    color var(--duration-fast);
 }
 
 .play-btn:hover {
@@ -291,40 +300,24 @@ a {
 }
 
 @keyframes fade-in-sound {
-  to { opacity: 1; }
-}
-
-/* ─── Tactical Corner Watermark Masking Shield ─── */
-.video-watermark-shield {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: clamp(280px, 32vw, 480px);
-  height: clamp(160px, 24vh, 280px);
-  pointer-events: none;
-  z-index: 18;
-  background: radial-gradient(
-    ellipse at 100% 100%,
-    rgba(5, 9, 15, 0.99) 0%,
-    rgba(5, 9, 15, 0.95) 45%,
-    rgba(5, 9, 15, 0.7) 70%,
-    transparent 100%
-  );
+  to {
+    opacity: 1;
+  }
 }
 
 /* ─── Skip Intro Button (Tactical Watermark Mask) ─── */
 .skip-btn {
   position: absolute;
-  bottom: calc(var(--space-xl) + 16px);
+  bottom: calc(var(--space-xl) + 2px);
   right: calc(var(--space-xl) - 14px);
   z-index: 25;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 216px;
-  min-height: 74px;
-  padding: 1.15rem 1.8rem;
-  background: linear-gradient(135deg, rgba(14, 21, 32, 0.99) 0%, rgba(6, 10, 16, 0.99) 100%);
+  min-width: 210px;
+  min-height: 70px;
+  padding: 1rem 1.7rem;
+  background: #090e16;
   border: 1px solid rgba(255, 170, 0, 0.45);
   border-left: 4px solid #ffaa00;
   border-radius: 3px;
@@ -334,29 +327,14 @@ a {
   letter-spacing: 0.24em;
   cursor: pointer;
   opacity: 0;
-  box-shadow: 0 14px 40px 14px rgba(5, 9, 15, 0.98),
-              0 -12px 30px 10px rgba(5, 9, 15, 0.98),
-              0 0 35px rgba(0, 0, 0, 0.9),
-              0 0 20px rgba(255, 170, 0, 0.15);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45),
+    0 0 1px rgba(255, 170, 0, 0.3);
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.25s ease,
-              box-shadow 0.25s ease,
-              background 0.25s ease;
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
   animation: fade-in-skip 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
-  overflow: visible;
-}
-
-/* Extended Dark Tactical Perimeter Shield */
-.skip-btn::before {
-  content: '';
-  position: absolute;
-  inset: -18px -14px;
-  border-radius: 6px;
-  background: radial-gradient(ellipse at center, rgba(5, 9, 15, 0.98) 60%, rgba(5, 9, 15, 0.7) 85%, transparent 100%);
-  pointer-events: none;
-  z-index: -1;
+  overflow: hidden;
 }
 
 .skip-btn[hidden] {
@@ -365,10 +343,10 @@ a {
 
 .skip-btn:hover {
   transform: translateY(-2px);
-  background: linear-gradient(135deg, rgba(22, 33, 50, 0.99) 0%, rgba(9, 15, 24, 0.99) 100%);
+  background: #0f1724;
   border-color: #ffaa00;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.99),
-              0 0 30px rgba(255, 170, 0, 0.35);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55),
+    0 0 12px rgba(255, 170, 0, 0.3);
 }
 
 .skip-inner {
@@ -430,7 +408,9 @@ a {
 }
 
 @keyframes fade-in-skip {
-  to { opacity: 1; }
+  to {
+    opacity: 1;
+  }
 }
 
 
@@ -513,7 +493,9 @@ a {
 }
 
 @keyframes ring-glow-in {
-  to { opacity: 1; }
+  to {
+    opacity: 1;
+  }
 }
 
 /* ─── Brand text ─── */
@@ -653,6 +635,7 @@ a {
   0% {
     transform: scale(1.01) translate(0, 0);
   }
+
   100% {
     transform: scale(1.05) translate(-0.8%, -0.8%);
   }
@@ -661,13 +644,11 @@ a {
 .explore-bg-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(6, 12, 19, 0.88) 0%,
-    rgba(6, 12, 19, 0.58) 28%,
-    rgba(6, 12, 19, 0.18) 65%,
-    rgba(6, 12, 19, 0) 100%
-  );
+  background: linear-gradient(to bottom,
+      rgba(6, 12, 19, 0.88) 0%,
+      rgba(6, 12, 19, 0.58) 28%,
+      rgba(6, 12, 19, 0.18) 65%,
+      rgba(6, 12, 19, 0) 100%);
   pointer-events: none;
 }
 
@@ -675,8 +656,8 @@ a {
   position: absolute;
   inset: 0;
   box-shadow: inset 0 80px 90px rgba(6, 12, 19, 0.75),
-              inset 40px 0 60px rgba(6, 12, 19, 0.35),
-              inset -40px 0 60px rgba(6, 12, 19, 0.35);
+    inset 40px 0 60px rgba(6, 12, 19, 0.35),
+    inset -40px 0 60px rgba(6, 12, 19, 0.35);
   pointer-events: none;
 }
 
@@ -716,7 +697,7 @@ a {
   border-radius: 2px;
   margin-bottom: var(--space-md);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7),
-              0 0 15px rgba(255, 170, 0, 0.2);
+    0 0 15px rgba(255, 170, 0, 0.2);
   opacity: 0;
   transform: translateY(-10px);
   animation: bgmi-badge-in 0.8s var(--ease-out-expo) 0.2s forwards;
@@ -736,8 +717,16 @@ a {
 }
 
 @keyframes pulse-icon {
-  from { opacity: 0.6; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 6px #ffaa00); }
+  from {
+    opacity: 0.6;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 6px #ffaa00);
+  }
 }
 
 .badge-brand {
@@ -790,8 +779,7 @@ a {
   background: linear-gradient(180deg, #d85600 0%, #ff8c00 25%, #ffcc00 65%, #ffffff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.98))
-          drop-shadow(0 0 40px rgba(255, 170, 0, 0.45));
+  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.98)) drop-shadow(0 0 40px rgba(255, 170, 0, 0.45));
   opacity: 0;
   transform: translateY(15px);
   animation: title-reveal 1.2s var(--ease-out-expo) 0.5s forwards;
@@ -824,8 +812,16 @@ a {
 }
 
 @keyframes pulse-dot {
-  from { opacity: 0.4; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1.3); box-shadow: 0 0 12px #ffaa00; }
+  from {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1.3);
+    box-shadow: 0 0 12px #ffaa00;
+  }
 }
 
 .telemetry-sep {
@@ -864,14 +860,12 @@ a {
   cursor: pointer;
   overflow: visible;
   transition: transform 0.25s var(--ease-cinematic), filter 0.25s var(--ease-cinematic);
-  filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.9))
-          drop-shadow(0 0 25px rgba(255, 170, 0, 0.45));
+  filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 25px rgba(255, 170, 0, 0.45));
 }
 
 .bgmi-cta-btn:hover {
   transform: translateY(-3px) scale(1.03);
-  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.95))
-          drop-shadow(0 0 45px rgba(255, 170, 0, 0.8));
+  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 45px rgba(255, 170, 0, 0.8));
 }
 
 .btn-slant-bg {
@@ -881,7 +875,7 @@ a {
   clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
   transition: all 0.3s ease;
   box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.8),
-              inset 0 -2px 0 rgba(0, 0, 0, 0.4);
+    inset 0 -2px 0 rgba(0, 0, 0, 0.4);
 }
 
 .bgmi-cta-btn:hover .btn-slant-bg {
@@ -925,20 +919,24 @@ a {
   left: -100%;
   width: 60%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.6) 50%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.6) 50%,
+      transparent 100%);
   transform: skewX(-20deg);
   pointer-events: none;
   animation: flare-sweep 4s infinite ease-in-out 1s;
 }
 
 @keyframes flare-sweep {
-  0% { left: -100%; }
-  35%, 100% { left: 160%; }
+  0% {
+    left: -100%;
+  }
+
+  35%,
+  100% {
+    left: 160%;
+  }
 }
 
 /* Explore fade out */
@@ -961,10 +959,12 @@ a {
     transform: scale(1);
     filter: drop-shadow(0 0 20px #ffaa00) brightness(1);
   }
+
   40% {
     transform: scale(0.96);
     filter: drop-shadow(0 0 40px #ffffff) brightness(1.6);
   }
+
   100% {
     transform: scale(1.08);
     filter: drop-shadow(0 0 60px #ffaa00) brightness(2);
@@ -978,11 +978,13 @@ a {
     transform: scale(1);
     filter: brightness(1);
   }
+
   60% {
     opacity: 1;
     transform: scale(1.05);
     filter: brightness(2) contrast(1.2);
   }
+
   100% {
     opacity: 0;
     transform: scale(1.08);
@@ -1055,12 +1057,10 @@ a {
 .vid2-flash-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(255, 170, 0, 0.5) 45%,
-    rgba(6, 12, 19, 0.95) 100%
-  );
+  background: radial-gradient(circle at center,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 170, 0, 0.5) 45%,
+      rgba(6, 12, 19, 0.95) 100%);
   pointer-events: none;
   z-index: 4;
   opacity: 0;
@@ -1075,6 +1075,7 @@ a {
     opacity: 1;
     transform: scale(1.05);
   }
+
   100% {
     opacity: 0;
     transform: scale(1);
@@ -1122,11 +1123,9 @@ a {
   justify-content: space-between;
   padding: var(--space-xl);
   z-index: 2;
-  background: radial-gradient(
-    circle at center,
-    transparent 60%,
-    rgba(0, 0, 0, 0.5) 100%
-  );
+  background: radial-gradient(circle at center,
+      transparent 60%,
+      rgba(0, 0, 0, 0.5) 100%);
 }
 
 .vid2-hud-top {
@@ -1192,8 +1191,8 @@ a {
 /* ─── Skip & Sound Buttons for vid2 ─── */
 .vid2-skip-btn {
   position: absolute;
-  bottom: var(--space-xl);
-  right: var(--space-xl);
+  bottom: calc(var(--space-xl) + 2px);
+  right: calc(var(--space-xl) - 14px);
   z-index: 25;
 }
 
@@ -1220,12 +1219,14 @@ a {
   .vid2-hud {
     padding: var(--space-md);
   }
+
   .vid2-skip-btn {
     bottom: var(--space-md);
     right: var(--space-md);
     font-size: 0.65rem;
     padding: 0.4rem 0.8rem;
   }
+
   .vid2-sound-btn {
     top: var(--space-md);
     right: var(--space-md);
@@ -1451,8 +1452,7 @@ a {
   background: linear-gradient(180deg, #ff3300 0%, #ff8800 30%, #ffcc00 65%, #ffffff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 4px 25px rgba(0, 0, 0, 0.95))
-          drop-shadow(0 0 45px rgba(255, 100, 0, 0.5));
+  filter: drop-shadow(0 4px 25px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 45px rgba(255, 100, 0, 0.5));
 }
 
 .showdown-tagline {
@@ -1769,9 +1769,9 @@ a {
   overflow: hidden;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .round-card:hover {
@@ -2257,6 +2257,7 @@ a {
    ═══════════════════════════════════════════════════════════ */
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -2304,7 +2305,9 @@ a {
    ═══════════════════════════════════════════════════════════ */
 
 /* Global Mobile Guard */
-html, body, #app {
+html,
+body,
+#app {
   overflow-x: hidden;
   max-width: 100vw;
   width: 100%;
@@ -2436,10 +2439,7 @@ html, body, #app {
 
   /* Vid2 Controls & HUD */
   .vid2-hud {
-    padding: max(0.85rem, env(safe-area-inset-top))
-             max(0.85rem, env(safe-area-inset-right))
-             max(0.85rem, env(safe-area-inset-bottom))
-             max(0.85rem, env(safe-area-inset-left));
+    padding: max(0.85rem, env(safe-area-inset-top)) max(0.85rem, env(safe-area-inset-right)) max(0.85rem, env(safe-area-inset-bottom)) max(0.85rem, env(safe-area-inset-left));
   }
 
   .vid2-hud-top {
@@ -2507,7 +2507,8 @@ html, body, #app {
   }
 
   .prize-card.gold {
-    order: -1; /* Champion is always shown first on mobile */
+    order: -1;
+    /* Champion is always shown first on mobile */
     padding: var(--space-xl) var(--space-md);
   }
 
