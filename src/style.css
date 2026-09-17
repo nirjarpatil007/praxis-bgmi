@@ -190,65 +190,6 @@ a {
   }
 }
 
-/* ─── Autoplay fallback prompt ─── */
-.play-prompt {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  background: radial-gradient(ellipse at center, rgba(6, 12, 19, 0.75) 0%, rgba(6, 12, 19, 0.95) 75%);
-  cursor: pointer;
-}
-
-.play-prompt[hidden] {
-  display: none;
-}
-
-.play-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-md);
-  background: none;
-  border: none;
-  color: var(--color-text);
-  cursor: pointer;
-  padding: var(--space-xl);
-  transition: transform var(--duration-med) var(--ease-cinematic),
-    color var(--duration-fast);
-}
-
-.play-btn:hover {
-  transform: scale(1.06);
-}
-
-.play-icon {
-  width: 84px;
-  height: 84px;
-  color: #ffaa00;
-  filter: drop-shadow(0 0 25px rgba(255, 170, 0, 0.55));
-  animation: pulse-icon 1.5s infinite alternate;
-}
-
-.play-label {
-  font-size: 0.92rem;
-  font-weight: 700;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: #ffffff;
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
-}
-
-.play-subtext {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.22em;
-  color: #ffaa00;
-  opacity: 0.9;
-  text-transform: uppercase;
-}
 
 /* ─── Sound toggle button ─── */
 .sound-btn {

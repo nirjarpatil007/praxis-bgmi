@@ -24,8 +24,6 @@ const els = {
   video: document.getElementById('hero-video'),
   videoIntro: document.getElementById('video-intro'),
   loader: document.getElementById('intro-loader'),
-  playPrompt: document.getElementById('play-prompt'),
-  playBtn: document.getElementById('play-btn'),
   soundBtn: document.getElementById('sound-btn'),
   soundLabel: document.getElementById('sound-label'),
   skipBtn: document.getElementById('skip-btn'),
@@ -157,8 +155,32 @@ function onVideoReady() {
         setState(State.INTRO_PLAYING);
       })
       .catch((err) => {
-        console.log('[PRAXIS] Unmuted autoplay restricted by browser policy, showing Enter with Audio prompt:', err);
-        showPlayPrompt();
+        console.log('[PRAXIS] Unmuted autoplay restricted by browser policy, continuing with video:', err);
+        video.muted = true;
+        updateSoundUI(false);
+        video.play().then(() => {
+          video.classList.add('visible');
+          setState(State.INTRO_PLAYING);
+
+          // Auto-unmute immediately on first user interaction
+          const autoUnmuteOnFirstTouch = () => {
+            if (video && video.muted) {
+              video.muted = false;
+              video.volume = 1.0;
+              updateSoundUI(true);
+            }
+            ['pointerdown', 'mousedown', 'keydown', 'touchstart', 'click'].forEach((evt) => {
+              window.removeEventListener(evt, autoUnmuteOnFirstTouch, true);
+            });
+          };
+
+          ['pointerdown', 'mousedown', 'keydown', 'touchstart', 'click'].forEach((evt) => {
+            window.addEventListener(evt, autoUnmuteOnFirstTouch, { capture: true, once: true });
+          });
+        }).catch(() => {
+          video.classList.add('visible');
+          setState(State.INTRO_PLAYING);
+        });
       });
   } else {
     video.classList.add('visible');
@@ -176,20 +198,6 @@ function onVideoError() {
 
   // Skip to explore directly with branded fallback
   skipToExplore();
-}
-
-function showPlayPrompt() {
-  els.loader.classList.add('hidden');
-  els.playPrompt.hidden = false;
-  els.video.classList.add('visible');
-
-  // Any key or touch/click starts with sound
-  const handleFirstKey = (e) => {
-    if (!els.playPrompt.hidden) {
-      onPlayClick(e);
-    }
-  };
-  window.addEventListener('keydown', handleFirstKey, { once: true });
 }
 
 function updateSoundUI(unmuted) {
@@ -326,37 +334,6 @@ function onSkipClick(e) {
   transitionToSplash();
 }
 
-function onPlayClick(e) {
-  if (e) e.stopPropagation();
-  els.playPrompt.hidden = true;
-  els.video.currentTime = 0;
-  els.video.defaultMuted = false;
-  els.video.muted = false;
-  els.video.volume = 1.0;
-  updateSoundUI(true);
-
-  const playPromise = els.video.play();
-  if (playPromise !== undefined) {
-    playPromise
-      .then(() => {
-        els.video.classList.add('visible');
-        setState(State.INTRO_PLAYING);
-      })
-      .catch((err) => {
-        console.log('[PRAXIS] Direct sound play error, fallback to muted:', err);
-        els.video.muted = true;
-        updateSoundUI(false);
-        els.video.play()
-          .then(() => {
-            els.video.classList.add('visible');
-            setState(State.INTRO_PLAYING);
-          })
-          .catch(() => {
-            skipToExplore();
-          });
-      });
-  }
-}
 
 // ─── VID2 CINEMATIC BRIEFING LOGIC ───
 let isVid2Transitioning = false;
@@ -681,10 +658,6 @@ function initPageVisibility() {
 function init() {
   // Bind event listeners
   els.skipBtn.addEventListener('click', onSkipClick);
-  els.playBtn.addEventListener('click', onPlayClick);
-  if (els.playPrompt) {
-    els.playPrompt.addEventListener('click', onPlayClick);
-  }
   els.exploreCta.addEventListener('click', onExploreCTAClick);
   if (els.soundBtn) {
     els.soundBtn.addEventListener('click', toggleSound);
