@@ -88,6 +88,18 @@ function handleIntroLoading() {
   const video = els.video;
   let isReady = false;
 
+  // Track early user interaction to immediately unlock unmuted audio
+  const onEarlyGesture = () => {
+    if (video) {
+      video.defaultMuted = false;
+      video.muted = false;
+      video.volume = 1.0;
+    }
+  };
+  ['pointerdown', 'mousedown', 'mouseup', 'keydown', 'touchstart', 'click', 'focus'].forEach((evt) => {
+    window.addEventListener(evt, onEarlyGesture, { capture: true, once: true });
+  });
+
   const triggerReady = () => {
     if (isReady) return;
     isReady = true;
@@ -150,31 +162,33 @@ function onVideoReady() {
     playPromise
       .then(() => {
         // Direct unmuted autoplay succeeded!
+        console.log('[PRAXIS] Unmuted playback started successfully');
         updateSoundUI(true);
         video.classList.add('visible');
         setState(State.INTRO_PLAYING);
       })
       .catch((err) => {
-        console.log('[PRAXIS] Unmuted autoplay restricted by browser policy, continuing with video:', err);
+        console.log('[PRAXIS] Unmuted autoplay restricted by browser policy, playing with instant auto-unmute:', err);
         video.muted = true;
         updateSoundUI(false);
         video.play().then(() => {
           video.classList.add('visible');
           setState(State.INTRO_PLAYING);
 
-          // Auto-unmute immediately on first user interaction
+          // Auto-unmute immediately on ANY first user interaction anywhere
           const autoUnmuteOnFirstTouch = () => {
             if (video && video.muted) {
               video.muted = false;
               video.volume = 1.0;
+              video.play().catch(() => {});
               updateSoundUI(true);
             }
-            ['pointerdown', 'mousedown', 'keydown', 'touchstart', 'click'].forEach((evt) => {
+            ['pointerdown', 'mousedown', 'mouseup', 'keydown', 'touchstart', 'touchend', 'click', 'focus'].forEach((evt) => {
               window.removeEventListener(evt, autoUnmuteOnFirstTouch, true);
             });
           };
 
-          ['pointerdown', 'mousedown', 'keydown', 'touchstart', 'click'].forEach((evt) => {
+          ['pointerdown', 'mousedown', 'mouseup', 'keydown', 'touchstart', 'touchend', 'click', 'focus'].forEach((evt) => {
             window.addEventListener(evt, autoUnmuteOnFirstTouch, { capture: true, once: true });
           });
         }).catch(() => {
