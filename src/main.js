@@ -150,7 +150,7 @@ function onVideoReady() {
   // Hide loader
   els.loader.classList.add('hidden');
 
-  // Start with audio enabled by default
+  // Start with audio enabled by default — exactly like vid2
   video.defaultMuted = false;
   video.muted = false;
   video.volume = 1.0;
@@ -161,16 +161,14 @@ function onVideoReady() {
   if (playPromise !== undefined) {
     playPromise
       .then(() => {
-        // Direct unmuted autoplay succeeded!
-        console.log('[PRAXIS] Unmuted playback started successfully');
-        updateSoundUI(true);
+        console.log('[PRAXIS] Hero video started playing successfully with audio');
         video.classList.add('visible');
         setState(State.INTRO_PLAYING);
       })
       .catch((err) => {
-        console.log('[PRAXIS] Unmuted autoplay restricted by browser policy, playing with instant auto-unmute:', err);
+        console.warn('[PRAXIS] Browser restriction on initial load, starting and unlocking audio on gesture:', err);
         video.muted = true;
-        updateSoundUI(false);
+        updateSoundUI(true); // Keep UI in AUDIO ON mode
         video.play().then(() => {
           video.classList.add('visible');
           setState(State.INTRO_PLAYING);
@@ -183,12 +181,12 @@ function onVideoReady() {
               video.play().catch(() => {});
               updateSoundUI(true);
             }
-            ['pointerdown', 'mousedown', 'mouseup', 'keydown', 'touchstart', 'touchend', 'click', 'focus'].forEach((evt) => {
+            ['pointerdown', 'mousedown', 'mouseup', 'keydown', 'touchstart', 'touchend', 'click'].forEach((evt) => {
               window.removeEventListener(evt, autoUnmuteOnFirstTouch, true);
             });
           };
 
-          ['pointerdown', 'mousedown', 'mouseup', 'keydown', 'touchstart', 'touchend', 'click', 'focus'].forEach((evt) => {
+          ['pointerdown', 'mousedown', 'mouseup', 'keydown', 'touchstart', 'touchend', 'click'].forEach((evt) => {
             window.addEventListener(evt, autoUnmuteOnFirstTouch, { capture: true, once: true });
           });
         }).catch(() => {
@@ -218,11 +216,11 @@ function updateSoundUI(unmuted) {
   if (!els.soundBtn) return;
   if (unmuted) {
     els.soundBtn.classList.remove('is-muted');
-    if (els.soundLabel) els.soundLabel.textContent = 'SOUND: ON';
+    if (els.soundLabel) els.soundLabel.textContent = 'AUDIO ON';
     els.soundBtn.setAttribute('aria-label', 'Mute audio');
   } else {
     els.soundBtn.classList.add('is-muted');
-    if (els.soundLabel) els.soundLabel.textContent = 'CLICK FOR AUDIO';
+    if (els.soundLabel) els.soundLabel.textContent = 'AUDIO OFF';
     els.soundBtn.setAttribute('aria-label', 'Unmute audio');
   }
 }
