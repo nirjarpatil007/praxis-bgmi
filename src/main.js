@@ -743,6 +743,7 @@ function init() {
   initStageTabs();
   initStickyNav();
   initPageVisibility();
+  initPaymentGateway();
 
   // Start the experience & pre-warm vid2 buffer
   if (els.vid2) {
@@ -750,6 +751,60 @@ function init() {
     els.vid2.load();
   }
   setState(State.INTRO_LOADING);
+}
+
+// ─── PAYMENT GATEWAY INTEGRATION & REDIRECT HANDLER ───
+function initPaymentGateway() {
+  const paymentBtn = document.getElementById('payment-btn');
+  const modal = document.getElementById('payment-modal');
+  const closeBtn = document.getElementById('payment-modal-close');
+  const dismissBtn = document.getElementById('payment-modal-dismiss');
+  const backdrop = document.getElementById('payment-modal-backdrop');
+
+  if (!paymentBtn || !modal) return;
+
+  function openPaymentModal() {
+    modal.removeAttribute('hidden');
+    modal.setAttribute('aria-hidden', 'false');
+    // Force reflow for smooth CSS transition
+    void modal.offsetWidth;
+    modal.classList.add('is-active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePaymentModal() {
+    modal.classList.remove('is-active');
+    setTimeout(() => {
+      if (!modal.classList.contains('is-active')) {
+        modal.setAttribute('hidden', '');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+    }, 250);
+  }
+
+  paymentBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const paymentUrl = paymentBtn.getAttribute('data-payment-url');
+    // If a payment gateway platform URL is configured, redirect directly
+    if (paymentUrl && paymentUrl !== '#' && paymentUrl.trim() !== '') {
+      window.location.href = paymentUrl;
+      return;
+    }
+    // Otherwise show the gateway integration modal
+    openPaymentModal();
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closePaymentModal);
+  if (dismissBtn) dismissBtn.addEventListener('click', closePaymentModal);
+  if (backdrop) backdrop.addEventListener('click', closePaymentModal);
+
+  // Close on Escape if modal is active
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('is-active')) {
+      closePaymentModal();
+    }
+  });
 }
 
 // Wait for DOM ready

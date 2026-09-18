@@ -574,18 +574,48 @@
             <h2 class="final-title">ENLIST YOUR SQUAD FOR THE SHOWDOWN</h2>
             <p class="final-desc">Fill out the official Google Form with your 4-player squad roster, in-game BGMI IDs,
               and contact info before slots fill up.</p>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeQhDQ5vHf19jNoTkXC8qm14bEgfonRoMi00E5iHIvHvvREYg/viewform"
-              target="_blank" rel="noopener noreferrer" class="final-register-btn bgmi-cta-btn" role="button">
-              <span class="btn-slant-bg" aria-hidden="true"></span>
-              <span class="btn-inner">
-                <svg class="btn-play-icon" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"
-                  aria-hidden="true">
-                  <polygon points="6 4 20 12 6 20 6 4" />
-                </svg>
-                <span class="btn-label">REGISTER NOW — GOOGLE FORM</span>
-                <span class="btn-flare" aria-hidden="true"></span>
-              </span>
-            </a>
+            <div class="final-cta-actions">
+              <!-- Official Google Form Button -->
+              <a href="https://docs.google.com/forms/d/e/1FAIpQLSeQhDQ5vHf19jNoTkXC8qm14bEgfonRoMi00E5iHIvHvvREYg/viewform"
+                target="_blank" rel="noopener noreferrer" class="final-register-btn bgmi-cta-btn" role="button">
+                <span class="btn-slant-bg" aria-hidden="true"></span>
+                <span class="btn-inner">
+                  <svg class="btn-play-icon" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"
+                    aria-hidden="true">
+                    <polygon points="6 4 20 12 6 20 6 4" />
+                  </svg>
+                  <span class="btn-label">REGISTER NOW — GOOGLE FORM</span>
+                  <span class="btn-flare" aria-hidden="true"></span>
+                </span>
+              </a>
+
+              <!-- Online Payment & Verification Button (Pre-configured for Payment Gateway Redirect) -->
+              <button type="button" id="payment-btn" class="payment-cta-btn"
+                data-payment-url=""
+                title="Online Payment Gateway — Coming Soon"
+                aria-label="Pay Tournament Entry Fee Online">
+                <span class="payment-btn-slant-bg" aria-hidden="true"></span>
+                <span class="payment-btn-inner">
+                  <svg class="payment-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
+                    <rect x="2" y="5" width="20" height="14" rx="2" />
+                    <line x1="2" y1="10" x2="22" y2="10" />
+                  </svg>
+                  <span class="payment-btn-label">PAY ENTRY FEE</span>
+                  <span class="payment-badge-status">
+                    <span class="payment-pulse-dot" aria-hidden="true"></span>
+                    COMING SOON
+                  </span>
+                  <span class="btn-flare" aria-hidden="true"></span>
+                </span>
+              </button>
+            </div>
+
+            <!-- Two-step Registration & Payment Flow Hint -->
+            <div class="payment-flow-hint">
+              <span class="hint-icon">⚡</span>
+              <span><strong>STEP 1:</strong> Complete Google Form &nbsp;|&nbsp; <strong>STEP 2:</strong> Payment Gateway Redirect & Slot Verification (Coming Soon)</span>
+            </div>
           </div>
         </section>
 
@@ -599,6 +629,54 @@
       </footer>
     </section>
 
+  </div>
+
+  <!-- Payment Gateway Integration Modal Dialog -->
+  <div id="payment-modal" class="payment-modal" hidden aria-hidden="true" role="dialog" aria-labelledby="payment-modal-title">
+    <div class="payment-modal-backdrop" id="payment-modal-backdrop"></div>
+    <div class="payment-modal-card">
+      <button type="button" class="payment-modal-close" id="payment-modal-close" aria-label="Close modal">&times;</button>
+      <div class="payment-modal-header">
+        <div class="payment-modal-icon-wrap">
+          <svg class="payment-modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="30" height="30" aria-hidden="true">
+            <rect x="2" y="5" width="20" height="14" rx="2" />
+            <line x1="2" y1="10" x2="22" y2="10" />
+          </svg>
+        </div>
+        <span class="payment-modal-kicker">// SECURE PAYMENT SYSTEM</span>
+        <h3 id="payment-modal-title" class="payment-modal-title">PAYMENT GATEWAY</h3>
+      </div>
+      <div class="payment-modal-body">
+        <p class="payment-modal-lead">The online payment and automated verification platform is currently being integrated.</p>
+        <div class="payment-steps-preview">
+          <div class="payment-step-item active">
+            <span class="step-badge">01</span>
+            <div class="step-info">
+              <strong>REGISTER SQUAD VIA GOOGLE FORM</strong>
+              <span>Fill roster, BGMI IDs, and contact info to reserve your slot.</span>
+            </div>
+          </div>
+          <div class="payment-step-item pending">
+            <span class="step-badge">02</span>
+            <div class="step-info">
+              <strong>PAYMENT REDIRECT & VERIFICATION</strong>
+              <span>Redirect to official payment platform, complete payment, and return verified. (Integrating soon)</span>
+            </div>
+          </div>
+        </div>
+        <p class="payment-modal-note">Please complete your registration via Google Form first. Direct payment will be activated shortly.</p>
+      </div>
+      <div class="payment-modal-actions">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeQhDQ5vHf19jNoTkXC8qm14bEgfonRoMi00E5iHIvHvvREYg/viewform"
+          target="_blank" rel="noopener noreferrer" class="payment-modal-form-btn">
+          <span>FILL GOOGLE FORM</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <button type="button" class="payment-modal-dismiss" id="payment-modal-dismiss">CLOSE</button>
+      </div>
+    </div>
   </div>
 
   <script type="module" src="/src/main.js"></script>

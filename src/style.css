@@ -2171,6 +2171,377 @@ a {
   line-height: 1.6;
 }
 
+.final-cta-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-lg);
+}
+
+/* ─── Payment CTA Button (Cyber / Online Gateway Theme) ─── */
+.payment-cta-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  overflow: visible;
+  transition: transform 0.25s var(--ease-cinematic), filter 0.25s var(--ease-cinematic);
+  filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 20px rgba(0, 229, 255, 0.35));
+}
+
+.payment-cta-btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 35px rgba(0, 229, 255, 0.65));
+}
+
+.payment-btn-slant-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #09283a 0%, #10435f 35%, #0096c7 75%, #48cae4 100%);
+  clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.payment-cta-btn:hover .payment-btn-slant-bg {
+  background: linear-gradient(180deg, #0d3852 0%, #0096c7 35%, #00e5ff 75%, #ffffff 100%);
+  filter: brightness(1.15);
+}
+
+.payment-btn-inner {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2.5rem;
+}
+
+.payment-btn-icon {
+  color: #03141d;
+  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.5));
+  transition: transform 0.25s ease;
+}
+
+.payment-cta-btn:hover .payment-btn-icon {
+  transform: scale(1.15) rotate(-5deg);
+}
+
+.payment-btn-label {
+  font-family: 'Bebas Neue', var(--font-display), sans-serif;
+  font-size: 1.55rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  color: #03141d;
+  text-transform: uppercase;
+  line-height: 1;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.payment-badge-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  background: rgba(3, 20, 29, 0.8);
+  color: #00e5ff;
+  border: 1px solid rgba(0, 229, 255, 0.5);
+  border-radius: 2px;
+  line-height: 1;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.25);
+}
+
+.payment-pulse-dot {
+  width: 6px;
+  height: 6px;
+  background: #00e5ff;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #00e5ff;
+  animation: pulse-dot 1.2s infinite alternate;
+}
+
+/* ─── Two-step Flow Hint ─── */
+.payment-flow-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--color-gray-light);
+  background: rgba(12, 18, 26, 0.8);
+  border: 1px dashed rgba(255, 170, 0, 0.35);
+  padding: 0.55rem 1.2rem;
+  border-radius: 4px;
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.payment-flow-hint strong {
+  color: #ffaa00;
+}
+
+.payment-flow-hint .hint-icon {
+  font-size: 0.9rem;
+}
+
+/* ─── Payment Gateway Modal ─── */
+.payment-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s var(--ease-cinematic);
+}
+
+.payment-modal.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.payment-modal[hidden] {
+  display: none !important;
+}
+
+.payment-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 8, 14, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.payment-modal-card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 540px;
+  background: linear-gradient(145deg, rgba(16, 26, 38, 0.98) 0%, rgba(9, 14, 22, 0.99) 100%);
+  border: 1px solid rgba(0, 229, 255, 0.45);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95), 0 0 40px rgba(0, 229, 255, 0.2);
+  border-radius: 4px;
+  padding: var(--space-xl) var(--space-lg);
+  color: #ffffff;
+  transform: translateY(20px) scale(0.97);
+  transition: transform 0.25s var(--ease-cinematic);
+}
+
+.payment-modal.is-active .payment-modal-card {
+  transform: translateY(0) scale(1);
+}
+
+.payment-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--color-gray-light);
+  font-size: 1.5rem;
+  line-height: 1;
+  width: 36px;
+  height: 36px;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.payment-modal-close:hover {
+  border-color: #ff3b30;
+  color: #ff3b30;
+  background: rgba(255, 59, 48, 0.1);
+}
+
+.payment-modal-header {
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.payment-modal-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(0, 229, 255, 0.12);
+  border: 1px solid rgba(0, 229, 255, 0.45);
+  color: #00e5ff;
+  margin-bottom: var(--space-sm);
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.35);
+}
+
+.payment-modal-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.35em;
+  color: #00e5ff;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.payment-modal-title {
+  font-family: 'Bebas Neue', var(--font-display), sans-serif;
+  font-size: 2.2rem;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+}
+
+.payment-modal-lead {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--color-gray-light);
+  text-align: center;
+  margin-bottom: var(--space-md);
+}
+
+.payment-steps-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: var(--space-md);
+}
+
+.payment-step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 0.8rem 1rem;
+  border-radius: 4px;
+  background: rgba(12, 18, 26, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.payment-step-item.active {
+  border-color: rgba(255, 170, 0, 0.5);
+  background: rgba(255, 170, 0, 0.06);
+}
+
+.payment-step-item.pending {
+  border-color: rgba(0, 229, 255, 0.4);
+  background: rgba(0, 229, 255, 0.05);
+}
+
+.step-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  line-height: 1;
+}
+
+.payment-step-item.active .step-badge {
+  background: #ffaa00;
+  color: #0a0d14;
+}
+
+.payment-step-item.pending .step-badge {
+  background: #00e5ff;
+  color: #05131a;
+}
+
+.step-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.step-info strong {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+}
+
+.step-info span {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--color-gray);
+  line-height: 1.4;
+}
+
+.payment-modal-note {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: #9db5c7;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  line-height: 1.5;
+}
+
+.payment-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.payment-modal-form-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.4rem;
+  background: #ffaa00;
+  color: #080d14;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+.payment-modal-form-btn:hover {
+  background: #ffc400;
+  box-shadow: 0 0 20px rgba(255, 170, 0, 0.6);
+  color: #000000;
+}
+
+.payment-modal-dismiss {
+  padding: 0.75rem 1.2rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--color-gray-light);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.payment-modal-dismiss:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
 
 /* ═══════════════════════════════════════════════════════════
    5. FOOTER
@@ -2504,6 +2875,35 @@ body,
     padding: var(--space-xl) var(--space-md);
   }
 
+  .final-cta-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+    align-items: stretch;
+    max-width: 440px;
+    margin: 0 auto var(--space-md);
+  }
+
+  .final-register-btn,
+  .payment-cta-btn {
+    width: 100%;
+  }
+
+  .payment-modal-card {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .payment-modal-actions {
+    flex-direction: column;
+  }
+
+  .payment-modal-form-btn,
+  .payment-modal-dismiss {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
   .site-footer {
     padding-bottom: max(var(--space-xl), env(safe-area-inset-bottom));
   }
@@ -2669,6 +3069,28 @@ body,
 
   .final-title {
     font-size: 1.95rem;
+  }
+
+  .payment-btn-slant-bg {
+    clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  }
+
+  .payment-btn-inner {
+    padding: 0.8rem 1.4rem;
+    gap: 0.5rem;
+  }
+
+  .payment-btn-label {
+    font-size: 1.25rem;
+    letter-spacing: 0.12em;
+  }
+
+  .payment-flow-hint {
+    font-size: 0.65rem;
+    padding: 0.45rem 0.8rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.25rem;
   }
 }
 
