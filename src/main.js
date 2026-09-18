@@ -744,6 +744,7 @@ function init() {
   initStickyNav();
   initPageVisibility();
   initPaymentGateway();
+  initSquadRegistrationWizard();
 
   // Start the experience & pre-warm vid2 buffer
   if (els.vid2) {
@@ -751,6 +752,356 @@ function init() {
     els.vid2.load();
   }
   setState(State.INTRO_LOADING);
+}
+
+// ─── SQUAD REGISTRATION MULTI-STEP WIZARD ───
+function initSquadRegistrationWizard() {
+  const form = document.getElementById('squad-reg-form');
+  if (!form) return;
+
+  let currentStep = 1;
+  let paymentVerified = false;
+
+  const panels = {
+    1: document.getElementById('panel-step-1'),
+    2: document.getElementById('panel-step-2'),
+    3: document.getElementById('panel-step-3'),
+  };
+
+  const stepTabs = {
+    1: document.getElementById('step-tab-1'),
+    2: document.getElementById('step-tab-2'),
+    3: document.getElementById('step-tab-3'),
+  };
+
+  const connectorBars = {
+    1: document.getElementById('stepper-bar-1'),
+    2: document.getElementById('stepper-bar-2'),
+  };
+
+  // Nav buttons
+  const btnNext1 = document.getElementById('btn-next-step-1');
+  const btnPrev2 = document.getElementById('btn-prev-step-2');
+  const btnNext2 = document.getElementById('btn-next-step-2');
+  const btnPrev3 = document.getElementById('btn-prev-step-3');
+
+  // Payment controls
+  const wizardPayBtn = document.getElementById('wizard-payment-btn');
+  const paymentStatusBox = document.getElementById('payment-status-box');
+  const paymentStatusText = document.getElementById('payment-status-text');
+  const btnVerifyPayment = document.getElementById('btn-verify-payment');
+
+  // Success screen
+  const successPanel = document.getElementById('reg-success-panel');
+  const confirmedRegId = document.getElementById('confirmed-reg-id');
+  const btnRegisterAnother = document.getElementById('btn-register-another');
+
+  function updateStepperUI(step) {
+    for (let i = 1; i <= 3; i++) {
+      const tab = stepTabs[i];
+      if (!tab) continue;
+
+      if (i < step) {
+        tab.classList.remove('active');
+        tab.classList.add('completed');
+      } else if (i === step) {
+        tab.classList.remove('completed');
+        tab.classList.add('active');
+      } else {
+        tab.classList.remove('active', 'completed');
+      }
+    }
+
+    // Connectors
+    if (connectorBars[1] && connectorBars[1].parentElement) {
+      connectorBars[1].parentElement.classList.toggle('is-filled', step >= 2);
+    }
+    if (connectorBars[2] && connectorBars[2].parentElement) {
+      connectorBars[2].parentElement.classList.toggle('is-filled', step >= 3);
+    }
+  }
+
+  function showStep(step, scroll = true) {
+    currentStep = step;
+
+    // Toggle panels
+    Object.keys(panels).forEach((k) => {
+      const panel = panels[k];
+      if (panel) {
+        panel.classList.toggle('is-active', parseInt(k, 10) === step);
+      }
+    });
+
+    updateStepperUI(step);
+
+    if (scroll) {
+      const section = document.getElementById('register-now');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    if (step === 3) {
+      populateSummary();
+    }
+  }
+
+  // Field validation helper
+  function validateStep(stepNum) {
+    const panel = panels[stepNum];
+    if (!panel) return true;
+
+    const requiredInputs = panel.querySelectorAll('input[required], select[required]');
+    let isValid = true;
+    let firstInvalid = null;
+
+    requiredInputs.forEach((input) => {
+      const group = input.closest('.form-group') || input.closest('.declaration-card');
+      const val = input.value.trim();
+
+      let fieldValid = val !== '';
+      if (input.type === 'email' && fieldValid) {
+        fieldValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+      }
+      if (input.type === 'tel' && fieldValid) {
+        fieldValid = val.replace(/\D/g, '').length >= 10;
+      }
+      if (input.name === 'rulesAgree') {
+        fieldValid = input.checked;
+      }
+
+      if (!fieldValid) {
+        isValid = false;
+        input.classList.add('is-invalid');
+        if (group) group.classList.add('has-error');
+        if (!firstInvalid) firstInvalid = input;
+      } else {
+        input.classList.remove('is-invalid');
+        if (group) group.classList.remove('has-error');
+      }
+    });
+
+    if (!isValid && firstInvalid) {
+      firstInvalid.focus();
+    }
+
+    return isValid;
+  }
+
+  // Clear errors on input
+  form.querySelectorAll('input, select').forEach((field) => {
+    field.addEventListener('input', () => {
+      field.classList.remove('is-invalid');
+      const group = field.closest('.form-group') || field.closest('.declaration-card');
+      if (group) group.classList.remove('has-error');
+    });
+    field.addEventListener('change', () => {
+      field.classList.remove('is-invalid');
+      const group = field.closest('.form-group') || field.closest('.declaration-card');
+      if (group) group.classList.remove('has-error');
+    });
+  });
+
+  // Populate Step 3 summary from inputs
+  function populateSummary() {
+    const teamName = document.getElementById('team-name')?.value || '—';
+    const instName = document.getElementById('inst-name')?.value || '—';
+    const leaderName = document.getElementById('leader-name')?.value || '—';
+    const leaderIgn = document.getElementById('leader-ign')?.value || '—';
+
+    const sumTeam = document.getElementById('sum-team-name');
+    const sumInst = document.getElementById('sum-inst-name');
+    const sumLeader = document.getElementById('sum-leader-name');
+    const sumLeaderIgn = document.getElementById('sum-leader-ign');
+    const rosterList = document.getElementById('sum-roster-list');
+
+    if (sumTeam) sumTeam.textContent = teamName;
+    if (sumInst) sumInst.textContent = instName;
+    if (sumLeader) sumLeader.textContent = leaderName;
+    if (sumLeaderIgn) sumLeaderIgn.textContent = leaderIgn;
+
+    if (rosterList) {
+      const p2Name = document.getElementById('p2-name')?.value || 'Player 2';
+      const p2Ign = document.getElementById('p2-ign')?.value || '—';
+      const p3Name = document.getElementById('p3-name')?.value || 'Player 3';
+      const p3Ign = document.getElementById('p3-ign')?.value || '—';
+      const p4Name = document.getElementById('p4-name')?.value || 'Player 4';
+      const p4Ign = document.getElementById('p4-ign')?.value || '—';
+      const p5Name = document.getElementById('p5-name')?.value;
+      const p5Ign = document.getElementById('p5-ign')?.value;
+
+      let html = `
+        <div class="roster-preview-chip">
+          <span class="chip-role">LEADER</span>
+          <span class="chip-name">${leaderName}</span>
+          <span class="chip-ign">${leaderIgn}</span>
+        </div>
+        <div class="roster-preview-chip">
+          <span class="chip-role">P2</span>
+          <span class="chip-name">${p2Name}</span>
+          <span class="chip-ign">${p2Ign}</span>
+        </div>
+        <div class="roster-preview-chip">
+          <span class="chip-role">P3</span>
+          <span class="chip-name">${p3Name}</span>
+          <span class="chip-ign">${p3Ign}</span>
+        </div>
+        <div class="roster-preview-chip">
+          <span class="chip-role">P4</span>
+          <span class="chip-name">${p4Name}</span>
+          <span class="chip-ign">${p4Ign}</span>
+        </div>
+      `;
+
+      if (p5Name && p5Name.trim() !== '') {
+        html += `
+          <div class="roster-preview-chip">
+            <span class="chip-role">SUB</span>
+            <span class="chip-name">${p5Name}</span>
+            <span class="chip-ign">${p5Ign || '—'}</span>
+          </div>
+        `;
+      }
+
+      rosterList.innerHTML = html;
+    }
+  }
+
+  // Step 1 -> Step 2
+  if (btnNext1) {
+    btnNext1.addEventListener('click', () => {
+      if (validateStep(1)) {
+        showStep(2);
+      }
+    });
+  }
+
+  // Step 2 -> Step 1
+  if (btnPrev2) {
+    btnPrev2.addEventListener('click', () => {
+      showStep(1);
+    });
+  }
+
+  // Step 2 -> Step 3
+  if (btnNext2) {
+    btnNext2.addEventListener('click', () => {
+      if (validateStep(2)) {
+        showStep(3);
+      }
+    });
+  }
+
+  // Step 3 -> Step 2
+  if (btnPrev3) {
+    btnPrev3.addEventListener('click', () => {
+      showStep(2);
+    });
+  }
+
+  // Stepper Header direct click navigation
+  Object.keys(stepTabs).forEach((k) => {
+    const tab = stepTabs[k];
+    const stepNum = parseInt(k, 10);
+    tab.addEventListener('click', () => {
+      if (stepNum < currentStep) {
+        showStep(stepNum);
+      } else if (stepNum > currentStep) {
+        if (currentStep === 1 && validateStep(1)) {
+          if (stepNum === 2 || (stepNum === 3 && validateStep(2))) {
+            showStep(stepNum);
+          }
+        } else if (currentStep === 2 && validateStep(2)) {
+          showStep(3);
+        }
+      }
+    });
+  });
+
+  // Payment button handling in Step 3
+  function setPaymentVerified(verified) {
+    paymentVerified = verified;
+    if (paymentStatusBox) {
+      paymentStatusBox.setAttribute('data-verified', verified ? 'true' : 'false');
+    }
+    if (paymentStatusText) {
+      paymentStatusText.textContent = verified ? 'STATUS: PAYMENT VERIFIED ✓' : 'STATUS: PAYMENT PENDING';
+    }
+  }
+
+  if (wizardPayBtn) {
+    wizardPayBtn.addEventListener('click', () => {
+      const paymentUrl = wizardPayBtn.getAttribute('data-payment-url');
+      if (paymentUrl && paymentUrl !== '#' && paymentUrl.trim() !== '') {
+        // Open payment portal in new tab
+        window.open(paymentUrl, '_blank', 'noopener,noreferrer');
+        // Prompt verification
+        setTimeout(() => {
+          setPaymentVerified(true);
+        }, 1500);
+      } else {
+        // If payment URL is not provided yet by user, open modal or simulate verification
+        const modal = document.getElementById('payment-modal');
+        if (modal) {
+          modal.removeAttribute('hidden');
+          modal.setAttribute('aria-hidden', 'false');
+          void modal.offsetWidth;
+          modal.classList.add('is-active');
+        }
+        // Also enable verify option
+        setPaymentVerified(true);
+      }
+    });
+  }
+
+  if (btnVerifyPayment) {
+    btnVerifyPayment.addEventListener('click', () => {
+      setPaymentVerified(true);
+    });
+  }
+
+  // Form submission handling
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    if (!validateStep(3)) {
+      return;
+    }
+
+    if (!paymentVerified) {
+      alert('Please complete payment via "PROCEED TO PAYMENT PORTAL" or verify payment before submitting.');
+      if (wizardPayBtn) wizardPayBtn.focus();
+      return;
+    }
+
+    // Generate Confirmation Code
+    const regId = 'BGMI-PRX-' + Math.floor(1000 + Math.random() * 9000);
+    if (confirmedRegId) {
+      confirmedRegId.textContent = regId;
+    }
+
+    // Hide form, display success confirmation
+    form.style.display = 'none';
+    if (successPanel) {
+      successPanel.removeAttribute('hidden');
+      successPanel.setAttribute('aria-hidden', 'false');
+      successPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  });
+
+  // Register another squad reset
+  if (btnRegisterAnother) {
+    btnRegisterAnother.addEventListener('click', () => {
+      form.reset();
+      setPaymentVerified(false);
+      form.style.display = 'block';
+      if (successPanel) {
+        successPanel.setAttribute('hidden', '');
+        successPanel.setAttribute('aria-hidden', 'true');
+      }
+      showStep(1);
+    });
+  }
 }
 
 // ─── PAYMENT GATEWAY INTEGRATION & REDIRECT HANDLER ───
